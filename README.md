@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+# 📝 墨协 · DocNest
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> 一个灵感涌现、团队共创的协作文档平台 —— 支持实时协作、知识库管理、版本控制、评论讨论、权限细粒度控制等能力。
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 项目简介
 
-### `npm start`
+墨协（DocNest）是一款为技术团队、内容团队和知识型组织打造的 **实时文档协作平台**，具备类语雀/Notion 的使用体验，支持多人在线编辑、文档结构管理、模板复用、标签体系、评论/批注、权限控制和审计追踪等核心能力。
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🎯 项目亮点
 
-### `npm test`
+- 🧠 **领域驱动设计（DDD）架构**：分层清晰、领域模型丰富、聚合与值对象抽象合理。
+- 🧩 **文档协作模型**：支持知识库、目录、文档、版本、评论等完整体系。
+- 🧑‍🤝‍🧑 **实时协同草稿**：预留 WebSocket/OT 实时编辑能力。
+- 🛡️ **细粒度权限系统**：支持文档级的 `查看/编辑/评论/管理员` 权限。
+- 🏷️ **标签与模板系统**：让文档可搜索、可组织、可复用。
+- 🔔 **消息中心**：系统/协作事件统一推送，支持外部 Webhook。
+- 📜 **操作审计日志**：可追踪所有文档操作、权限变更等。
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🧱 技术栈
 
-### `npm run build`
+| 模块           | 技术选型                         |
+|----------------|----------------------------------|
+| 架构风格       | 单体架构 + DDD + 分层设计        |
+| 后端框架       | Spring Boot 3.x, MyBatis-Plus    |
+| 数据库         | MySQL 8.x                        |
+| 缓存与异步     | Redis, RabbitMQ (预留)           |
+| 安全认证       | Spring Security + JWT            |
+| 文档编辑支持   | Markdown, Draft.js（预留）       |
+| 构建工具       | Maven                            |
+| 国际化         | Spring MessageSource             |
+| 项目管理       | GitHub / Gitee / GitLab          |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🗃️ 数据模型设计（文档核心表）
 
-### `npm run eject`
+| 表名                     | 说明                       |
+|--------------------------|----------------------------|
+| `user`                   | 用户表                     |
+| `organization`           | 团队/组织表                |
+| `knowledge_base`         | 知识库                     |
+| `document`               | 文档和目录表（支持树形）   |
+| `document_version`       | 文档版本表                 |
+| `document_comment`       | 评论与批注                 |
+| `document_tag`           | 标签关联表                 |
+| `document_template`      | 模板复用表                 |
+| `document_permission`    | 文档级权限控制表           |
+| `operation_log`          | 操作日志审计表             |
+| `notification`           | 通知中心                   |
+| `webhook`                | 第三方 Webhook 推送        |
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## ✅ 进阶功能规划
+1. WebSocket + CRDT 实时编辑协作
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+2. 文档锁定/草稿协作状态控制
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. 全文搜索（Elasticsearch）
 
-## Learn More
+4. 移动端适配
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+5. 插件扩展机制
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+6. GitHub OAuth & 企业微信登录集成
 
-### Code Splitting
+## 👨‍💻 项目维护
+姓名	角色	联系方式
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+HeathCetide	架构设计 & 主开发	19511899044@163.com
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 📄 License
+本项目基于 MIT 协议开源，可自由使用、修改、分发。
