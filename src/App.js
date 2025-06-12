@@ -66,6 +66,7 @@ import { useNavigate } from "react-router-dom";
 import {CommandPalette} from "./components/CommandPalette";
 import {ColorPicker} from "./components/ColorPicker";
 import {JSONViewer} from "./components/JSONViewer";
+import HomePage from "./pages/Home";
 const initialItems = [
     { id: nanoid(), title: "Heading 1", level: 0 },
     { id: nanoid(), title: "Subheading 1.1", level: 1 },
@@ -156,7 +157,7 @@ function App() {
 
     return (
         <ToastProvider swipeDirection="right">
-
+            <HomePage/>
             <JSONViewer
                 data={{
                     user: { name: "张三", age: 28 },
