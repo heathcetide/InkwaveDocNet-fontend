@@ -1,0 +1,166 @@
+import React, { useState } from "react";
+import { Menu, X, User, LogIn } from "lucide-react";
+import { clsx } from "clsx";
+
+export const Navbar = ({
+                           logo = "Logo",
+                           logoIcon = null, // ReactNode or image
+                           links = [], // [{ label, href }]
+                           user = null, // { name, avatarUrl, menu: [{ label, href }] }
+                           onLogin = () => {},
+                           onLogout = () => {},
+                           themeColor = "cyan", // 控制主题色类名前缀
+                           className = "",
+                       }) => {
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    return (
+        <nav className={clsx("w-full bg-white dark:bg-neutral-900 shadow z-40", className)}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-16">
+                    {/* Logo */}
+                    {logo && (
+                        <div className={clsx("flex items-center gap-2 text-xl font-bold", `text-${themeColor}-600`, `dark:text-${themeColor}-400`)}>
+                            {logoIcon && <span className="w-6 h-6">{logoIcon}</span>}
+                            {logo}
+                        </div>
+                    )}
+
+                    {/* Desktop Menu */}
+                    <div className="hidden md:flex gap-6 items-center">
+                        {links.map((link, idx) => (
+                            <a
+                                key={idx}
+                                href={link.href}
+                                className={clsx(
+                                    "text-sm font-medium transition",
+                                    "text-neutral-700 dark:text-neutral-200",
+                                    `hover:text-${themeColor}-500 dark:hover:text-${themeColor}-400`
+                                )}
+                            >
+                                {link.label}
+                            </a>
+                        ))}
+                    </div>
+
+                    {/* User area */}
+                    <div className="hidden md:flex items-center gap-4">
+                        {user ? (
+                            <div className="relative">
+                                <button onClick={() => setMenuOpen(!menuOpen)} className="flex items-center gap-2">
+                                    <img
+                                        src={user.avatarUrl}
+                                        alt={user.name}
+                                        className="w-8 h-8 rounded-full object-cover border border-neutral-300 dark:border-neutral-700"
+                                    />
+                                    <span className="text-sm text-neutral-700 dark:text-neutral-200">{user.name}</span>
+                                </button>
+                                {menuOpen && (
+                                    <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded shadow-lg py-2 z-50">
+                                        {(user.menu || []).map((item, idx) => (
+                                            <a
+                                                key={idx}
+                                                href={item.href}
+                                                className="block w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                            >
+                                                {item.label}
+                                            </a>
+                                        ))}
+                                        <button
+                                            onClick={onLogout}
+                                            className="block w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                        >
+                                            退出登录
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            onLogin && (
+                                <button
+                                    onClick={onLogin}
+                                    className={clsx(
+                                        "flex items-center gap-2 text-sm font-medium transition",
+                                        "text-neutral-700 dark:text-neutral-200",
+                                        `hover:text-${themeColor}-500 dark:hover:text-${themeColor}-400`
+                                    )}
+                                >
+                                    <LogIn className="w-4 h-4" /> 登录
+                                </button>
+                            )
+                        )}
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <button
+                        onClick={() => setMobileOpen(!mobileOpen)}
+                        className="md:hidden text-neutral-700 dark:text-neutral-200"
+                    >
+                        {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                    </button>
+                </div>
+            </div>
+
+            {/* Mobile Drawer */}
+            {mobileOpen && (
+                <div className="md:hidden px-4 pb-4 space-y-2">
+                    {links.map((link, idx) => (
+                        <a
+                            key={idx}
+                            href={link.href}
+                            className={clsx(
+                                "block py-2 text-sm transition",
+                                "text-neutral-700 dark:text-neutral-200",
+                                `hover:text-${themeColor}-500 dark:hover:text-${themeColor}-400`
+                            )}
+                        >
+                            {link.label}
+                        </a>
+                    ))}
+
+                    {user ? (
+                        <div className="pt-2 border-t border-neutral-200 dark:border-neutral-700 space-y-1">
+                            <div className="flex items-center gap-2 py-2">
+                                <img
+                                    src={user.avatarUrl}
+                                    alt={user.name}
+                                    className="w-6 h-6 rounded-full object-cover"
+                                />
+                                <span className="text-sm text-neutral-700 dark:text-neutral-200">{user.name}</span>
+                            </div>
+                            {(user.menu || []).map((item, idx) => (
+                                <a
+                                    key={idx}
+                                    href={item.href}
+                                    className="block w-full text-left px-2 py-1 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                >
+                                    {item.label}
+                                </a>
+                            ))}
+                            <button
+                                onClick={onLogout}
+                                className="block w-full text-left px-2 py-1 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                            >
+                                退出登录
+                            </button>
+                        </div>
+                    ) : (
+                        onLogin && (
+                            <button
+                                onClick={onLogin}
+                                className={clsx(
+                                    "flex items-center gap-2 text-sm font-medium transition",
+                                    "text-neutral-700 dark:text-neutral-200",
+                                    `hover:text-${themeColor}-500 dark:hover:text-${themeColor}-400`
+                                )}
+                            >
+                                <LogIn className="w-4 h-4" /> 登录
+                            </button>
+                        )
+                    )}
+                </div>
+            )}
+        </nav>
+    );
+};

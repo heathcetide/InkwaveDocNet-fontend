@@ -1,5 +1,5 @@
 // components/NestedOutlineEditor.js
-import React, { useState } from "react";
+import React from "react";
 import {
     DndContext,
     useSensor,
@@ -14,8 +14,7 @@ import {
     arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { nanoid } from "nanoid";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 export const NestedOutlineEditor = ({ items, onChange }) => {
     const sensors = useSensors(useSensor(PointerSensor));

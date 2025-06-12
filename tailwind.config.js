@@ -4,7 +4,17 @@ module.exports = {
     "./public/index.html"
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'progress-stripes': 'progressStripes 1s linear infinite',
+      },
+      keyframes: {
+        progressStripes: {
+          '0%': { backgroundPosition: '0 0' },
+          '100%': { backgroundPosition: '1rem 0' },
+        },
+      },
+    },
   },
   plugins: [],
 }

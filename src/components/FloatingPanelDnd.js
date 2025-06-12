@@ -36,7 +36,7 @@ export const FloatingPanelDnd = ({
 };
 
 const DraggablePanel = ({ x, y, title, children }) => {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    const { attributes, listeners, setNodeRef} = useDraggable({
         id: "floating-panel",
     });
 

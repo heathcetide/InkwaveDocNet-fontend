@@ -11,7 +11,6 @@ import {
     SortableContext,
     useSortable,
     verticalListSortingStrategy,
-    arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { nanoid } from "nanoid";
@@ -33,7 +32,7 @@ export const BlockEditorMultiSelect = () => {
 
     const onDragEnd = ({ active, over }) => {
         if (!over || active.id === over.id) return;
-        const fromIndex = blocks.findIndex((b) => b.id === active.id);
+        blocks.findIndex((b) => b.id === active.id);
         const toIndex = blocks.findIndex((b) => b.id === over.id);
 
         const idsToMove = selectedIds.includes(active.id)

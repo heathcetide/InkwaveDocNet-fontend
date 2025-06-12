@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { BrowserRouter } from "react-router-dom";
+import { NotificationProvider } from "./components/NotificationCenter";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+      <BrowserRouter>
+        <NotificationProvider max={3}>
+          <App />
+        </NotificationProvider>
+      </BrowserRouter>
   </React.StrictMode>
 );
 

@@ -18,7 +18,7 @@ import { Tooltip, TooltipTrigger, TooltipContent } from "./components/Tooltip";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/Tabs";
 import { BlockEditorMultiSelect } from "./components/BlockEditorMultiSelect";
 import { NestedOutlineEditor } from "./components/NestedOutlineEditor";
-
+import { Popover } from "./components/Popover";
 import { ComponentInsertEditor } from "./components/ComponentInsertEditor";
 
 import {
@@ -29,7 +29,7 @@ import {
     ToastDescription,
     ToastAction,
 } from "./components/Toast";
-import { Mail, Settings, Info, Bell } from "lucide-react";
+import {Mail, Settings, Info, Bell, EditIcon, CopyIcon, TrashIcon, Smartphone, Home, User} from "lucide-react";
 import { Select } from "./components/Select";
 import {Autocomplete} from "./components/Autocomplete";
 import {Combobox} from "./components/Combobox";
@@ -39,7 +39,33 @@ import {TimePicker} from "./components/TimePicker";
 import {DateRangePicker} from "./components/DateRangePicker";
 import {DatePicker} from "./components/DatePicker";
 import { nanoid } from "nanoid";
+import {HoverCard} from "./components/HoverCard";
+import {ContextMenu} from "./components/ContextMenu";
+import {AlertDialog} from "./components/AlertDialog";
+import { useNotification } from "./components/NotificationCenter";
+import {Avatar} from "./components/Avatar";
+import { Badge } from "./components/Badge";
+import {ProgressBar} from "./components/ProgressBar";
+import {Spinner} from "./components/Spinner";
+import {SkeletonAvatar, SkeletonCard, SkeletonText, Skeleton} from "./components/Skeleton";
+import {Chip} from "./components/Chip";
+import {DataTable} from "./components/DataTable";
+import {Chart} from "./components/Chart";
+import {Timeline} from "./components/Timeline";
+import {Pagination} from "./components/Pagination";
+import {Breadcrumbs} from "./components/Breadcrumbs";
+import {Drawer} from "./components/Drawer";
+import {Navbar} from "./components/Navbar";
+import {Stepper} from "./components/Stepper";
+import {Accordion} from "./components/Accordion";
+import {SiderMenu} from "./components/SiderMenu";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 
+import { useNavigate } from "react-router-dom";
+import {CommandPalette} from "./components/CommandPalette";
+import {ColorPicker} from "./components/ColorPicker";
+import {JSONViewer} from "./components/JSONViewer";
 const initialItems = [
     { id: nanoid(), title: "Heading 1", level: 0 },
     { id: nanoid(), title: "Subheading 1.1", level: 1 },
@@ -68,7 +94,33 @@ const OPTIONS = [
 ];
 
 
+const columns = [
+    { label: "姓名", key: "name" },
+    { label: "年龄", key: "age" },
+    { label: "状态", key: "status", render: (val) => <span className="text-green-600">{val}</span> },
+];
+
+const allData = [
+    { name: "张三", age: 28, status: "活跃" },
+    { name: "李四", age: 34, status: "正常" },
+    { name: "王五", age: 22, status: "禁用" },
+    { name: "赵六", age: 45, status: "活跃" },
+    { name: "钱七", age: 31, status: "正常" },
+    { name: "孙八", age: 29, status: "禁用" },
+    { name: "周九", age: 27, status: "正常" },
+    { name: "吴十", age: 33, status: "活跃" },
+    { name: "郑十一", age: 26, status: "禁用" },
+    { name: "王十二", age: 39, status: "正常" },
+    { name: "刘十三", age: 24, status: "活跃" },
+    { name: "赵十四", age: 30, status: "正常" },
+];
+
 function App() {
+    const [page, setPage] = useState(1);
+    const pageSize = 5;
+    const totalPages = Math.ceil(allData.length / pageSize);
+    const pagedData = allData.slice((page - 1) * pageSize, page * pageSize);
+    const [isOpen, setIsOpen] = useState(false);
     const [open, setOpen] = useState(false);
     const [openToast, setOpenToast] = useState(false);
     const [gender, setGender] = useState("male");
@@ -84,10 +136,328 @@ function App() {
     const [time, setTime] = useState(null);
     const [timeRange, setTimeRange] = useState([]);
     const [items, setItems] = useState(initialItems);
+    const { addNotification } = useNotification();
+    const [step, setStep] = useState(0);
+    const navigate = useNavigate();
+    useKeyboardShortcuts([
+        {
+            keyCombo: "ctrl+s",
+            callback: () => console.log("保存成功！"),
+        },
+        {
+            keyCombo: "shift+n",
+            callback: () => console.log("新建项目！"),
+        },
+        {
+            keyCombo: "alt+enter",
+            callback: () => console.log("特殊动作触发！"),
+        },
+    ]);
 
     return (
         <ToastProvider swipeDirection="right">
+
+            <JSONViewer
+                data={{
+                    user: { name: "张三", age: 28 },
+                    roles: ["admin", "editor"],
+                    active: true,
+                }}
+                editable={true}
+                onEdit={(e) => console.log("JSON 被修改", e)}
+            />
+            <ColorPicker
+                label="主题颜色"
+                color="#6366f1"
+                onChange={(hex) => console.log("选择颜色:", hex)}
+            />
+
+            {/*Ctrl + K*/}
+            <CommandPalette
+                themeColor="violet"
+                actions={[
+                    {
+                        label: "跳转首页",
+                        icon: <Home className="w-4 h-4" />,
+                        shortcut: ["G", "H"],
+                        onTrigger: () => navigate("/"),
+                    },
+                    {
+                        label: "打开用户管理",
+                        icon: <User className="w-4 h-4" />,
+                        shortcut: ["G", "U"],
+                        onTrigger: () => navigate("/users"),
+                    },
+                ]}
+            />
+            {/*<BrowserRouter>*/}
+            {/*    <div className="flex h-screen">*/}
+            {/*        <SiderMenu />*/}
+            {/*        <div className="flex-1 flex flex-col">*/}
+            {/*            <Navbar />*/}
+            {/*            <main className="flex-1 p-4 overflow-auto">*/}
+            {/*                <Routes>*/}
+            {/*                    <Route path="/dashboard" />*/}
+            {/*                    <Route path="/users" />*/}
+            {/*                    ...*/}
+            {/*                </Routes>*/}
+            {/*            </main>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</BrowserRouter>*/}
+            {/*<Accordion*/}
+            {/*    themeColor="violet"*/}
+            {/*    allowMultiple={false}*/}
+            {/*    defaultActive={[0]}*/}
+            {/*    items={[*/}
+            {/*        { title: "什么是Accordion组件？", content: "这是一个可折叠的内容区域，用于展示隐藏信息。" },*/}
+            {/*        { title: "支持多个同时展开吗？", content: "可以，设置 allowMultiple 为 true 即可。" },*/}
+            {/*        { title: "支持暗黑模式吗？", content: "当然支持！" },*/}
+            {/*    ]}*/}
+            {/*/>*/}
+            {/*<Stepper*/}
+            {/*    steps={[*/}
+            {/*        { title: "步骤一", description: "填写基本信息" },*/}
+            {/*        { title: "步骤二", description: "上传资料" },*/}
+            {/*        { title: "步骤三", description: "确认提交" },*/}
+            {/*    ]}*/}
+            {/*    currentStep={step}*/}
+            {/*    onStepChange={setStep}*/}
+            {/*    themeColor="emerald"*/}
+            {/*>*/}
+            {/*    {[*/}
+            {/*        <div key="1">这里是第一步内容</div>,*/}
+            {/*        <div key="2">这里是第二步内容</div>,*/}
+            {/*        <div key="3">这里是第三步内容</div>,*/}
+            {/*    ]}*/}
+            {/*</Stepper>*/}
+            <Navbar
+                logo="MySite"
+                logoIcon={<img src="/logo.svg" className="w-6 h-6" />}
+                links={[
+                    { label: "首页", href: "/" },
+                    { label: "产品", href: "/products" },
+                    { label: "关于我们", href: "/about" },
+                ]}
+                user={{ name: "张三", avatarUrl: "/avatar.png" }}
+                onLogin={() => console.log("Login")}
+                onLogout={() => console.log("Logout")}
+            />
+
+            <Navbar
+                logo={null}
+                logoIcon={null}
+                links={[
+                    { label: "首页", href: "/" },
+                    { label: "产品", href: "/products" },
+                    { label: "关于我们", href: "/about" },
+                ]}
+                user={null}
+                onLogin={() => console.log("去登录")}
+            />
+
+            <Navbar
+                logo={null}
+                logoIcon={null}
+                links={[
+                    { label: "首页", href: "/" },
+                    { label: "产品", href: "/products" },
+                    { label: "关于我们", href: "/about" },
+                ]}
+                user={undefined}
+                onLogin={undefined}
+            />
+            <Navbar themeColor="violet" />
+
+            <Navbar
+                user={{
+                    name: "张三",
+                    avatarUrl: "/avatar.png",
+                    menu: [
+                        { label: "个人中心", href: "/profile" },
+                        { label: "设置", href: "/settings" },
+                    ],
+                }}
+            />
             <div className="min-h-screen bg-gray-100 p-6 space-y-8 max-w-xl mx-auto">
+
+                <Drawer open={isOpen} onClose={() => setIsOpen(false)} position="right">
+                    <div className="text-base text-neutral-700 dark:text-neutral-200">
+                        这是自定义的抽屉内容区域。
+                    </div>
+                </Drawer>
+
+                <Button onClick={() => setIsOpen(true)}>打开侧边栏</Button>
+                <Breadcrumbs
+                    items={[
+                        { label: "首页", href: "/" },
+                        { label: "产品", href: "/products" },
+                        { label: "智能手机", href: "/products/phones", icon: <Smartphone className="w-4 h-4" /> },
+                        { label: "iPhone 15 Pro" }, // 最后一个为当前页面
+                    ]}
+                />
+                <Timeline
+                    color="violet"
+                    items={[
+                        {
+                            time: "2025-06-10 09:00",
+                            title: "创建项目",
+                            description: "由用户张三发起的项目创建。",
+                            icon: "📦",
+                        },
+                        {
+                            time: "2025-06-11 13:30",
+                            title: "新增成员",
+                            description: "已添加成员李四、王五至项目中。",
+                            icon: "👥",
+                        },
+                        {
+                            time: "2025-06-12 10:15",
+                            title: "发布版本",
+                            description: "发布了 v1.0.0。",
+                            icon: "🚀",
+                        },
+                    ]}
+                />
+                <Chart
+                    type="line"
+                    data={[
+                        { name: "一月", value: 400 },
+                        { name: "二月", value: 600 },
+                        { name: "三月", value: 800 },
+                    ]}
+                    color="violet"
+                    strokeWidth={4}
+                    showGrid
+                    showTooltip
+                    showLegend
+                />
+                <Chart
+                    type="pie"
+                    data={[
+                        { name: "前端", value: 40 },
+                        { name: "后端", value: 30 },
+                        { name: "设计", value: 30 },
+                    ]}
+                    color={["#10b981", "#06b6d4", "#8b5cf6"]}
+                />
+                <Chart
+                    type="line"
+                    data={[
+                        { name: "一月", 收入: 4000, 支出: 2400 },
+                        { name: "二月", 收入: 3000, 支出: 1398 },
+                        { name: "三月", 收入: 5000, 支出: 2210 },
+                    ]}
+                    color="auto"
+                    showLegend
+                />
+                <DataTable columns={columns} data={pagedData} loading={false} />
+
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                />
+                <Chip color="cyan" variant="soft">状态：活跃</Chip>
+
+                <Chip color="violet" variant="outline" icon={<i>🔖</i>}>
+                    标签
+                </Chip>
+
+                <Chip color="emerald" variant="solid" onClose={() => alert("删除标签")}>
+                    可删除的标签
+                </Chip>
+                <Skeleton height="h-5" width="w-1/3" />
+
+                <SkeletonText lines={4} />
+
+                <SkeletonAvatar size="w-16 h-16" />
+
+                <SkeletonCard />
+                <Spinner size="sm" color="emerald" />
+                <Spinner size="md" color="violet" className="mx-2" />
+                <Spinner size="lg" color="cyan" thickness="2" />
+
+                <ProgressBar value={45} label="上传中" showValue color="violet" />
+
+                <ProgressBar
+                    value={72}
+                    striped
+                    animated
+                    color="emerald"
+                    height="h-4"
+                    radius="rounded-md"
+                    label
+                    showValue
+                />
+                <Badge color="emerald" variant="solid">
+                    正常状态
+                </Badge>
+
+                <Badge color="cyan" variant="soft" size="sm">
+                    信息
+                </Badge>
+
+                <Badge color="violet" variant="outline" size="lg" rounded="md">
+                    标签
+                </Badge>
+                <Avatar alt="李雷" />
+                <Avatar alt="张伟" />
+                <Avatar
+                    src="https://i.pravatar.cc/150?img=5"
+                    alt="张三"
+                    size="lg"
+                    shape="circle"
+                    ring
+                    color="emerald"
+                />
+
+                <Button onClick={() => {
+                    addNotification({
+                        title: "已保存",
+                        message: "你的更改已保存成功。",
+                        type: "success", // info | success | error | custom
+                        duration: 5000,  // 可选
+                    });
+                }}>点击一下</Button>
+                <AlertDialog
+                    trigger={<button className="bg-red-500 text-white px-4 py-2 rounded">删除</button>}
+                    title="确认删除？"
+                    description="此操作无法撤销，您确定要删除该项目吗？"
+                    confirmText="删除"
+                    cancelText="取消"
+                    color="red"
+                    onConfirm={() => console.log("已确认删除")}
+                />
+                <ContextMenu
+                    color="violet"
+                    items={[
+                        { label: "编辑", icon: <EditIcon />, onSelect: () => console.log("编辑") },
+                        { label: "复制", icon: <CopyIcon />, shortcut: "⌘C", onSelect: () => {} },
+                        { type: "separator" },
+                        { label: "删除", icon: <TrashIcon />, onSelect: () => alert("删除！") },
+                    ]}
+                >
+                    <div className="p-6 border rounded-xl bg-white dark:bg-neutral-900">
+                        右键我看看
+                    </div>
+                </ContextMenu>
+                <HoverCard
+                    trigger={<span className="underline cursor-pointer">悬停我</span>}
+                    color="cyan"
+                >
+                    <div className="text-sm text-white">
+                        👤 用户信息：<br />
+                        名称：张三<br />
+                        职位：前端工程师
+                    </div>
+                </HoverCard>
+                <Popover
+                    trigger={<button className="px-4 py-2 bg-emerald-500 text-white rounded">点我</button>}
+                    color="violet"
+                >
+                    <div className="text-white text-sm">你好，我是浮层内容 ✨</div>
+                </Popover>
                 {/* 输入卡片 */}
                 <Card
                     title="注册表单"

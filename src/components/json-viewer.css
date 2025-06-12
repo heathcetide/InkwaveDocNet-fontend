@@ -1,0 +1,11 @@
+.rjv-icon-container {
+    width: 14px !important;
+    height: 14px !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+}
+.rjv-icon-container svg {
+    width: 14px !important;
+    height: 14px !important;
+}
