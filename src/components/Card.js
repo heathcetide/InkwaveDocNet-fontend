@@ -12,7 +12,8 @@ export const Card = ({ title, description, className, children, footer, variant 
   return (
       <div
           className={clsx(
-              "rounded-2xl border p-4 shadow-sm",
+              "bg-white rounded-xl shadow p-6",
+              "dark:bg-neutral-700 dark:border dark:border-neutral-600",
               variantMap[variant] || variantMap.default,
               className
           )}

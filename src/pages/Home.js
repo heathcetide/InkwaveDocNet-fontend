@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { Navbar } from "../components/Navbar";
 import { SiderMenu } from "../components/SiderMenu";
-import { Home, Users, Settings, FileText, BookOpen, Clipboard, Clock, Star, TrendingUp } from "lucide-react";
+import { Home, Users, Settings, FileText, BookOpen, Clipboard, Clock, TrendingUp } from "lucide-react";
 import { Card } from "../components/Card";
 import { Chart } from "../components/Chart";
 import { Timeline } from "../components/Timeline";
 import { ProgressBar } from "../components/ProgressBar";
 import { Button } from "../components/Button";
 import { useNotification } from "../components/NotificationCenter";
+import { Carousel } from "../components/Carousel";
+import { Footer } from "../components/Footer";
 
 const HomePage = () => {
     // 导航栏链接
@@ -32,8 +34,65 @@ const HomePage = () => {
         { label: "仪表盘", icon: <Home className="w-5 h-5" />, path: "/dashboard" },
         { label: "文档管理", icon: <FileText className="w-5 h-5" />, path: "/documents" },
         { label: "模板中心", icon: <BookOpen className="w-5 h-5" />, path: "/templates" },
-        { label: "用户管理", icon: <Users className="w-5 h-5" />, path: "/users" },
+        { label: "我的团队", icon: <Users className="w-5 h-5" />, path: "/teams" },
         { label: "系统设置", icon: <Settings className="w-5 h-5" />, path: "/settings" },
+    ];
+
+    // 轮播图数据
+    const carouselItems = [
+        {
+            image: "https://via.placeholder.com/1200x400",
+            title: "实时协同编辑",
+            description: "支持多人同时编辑，实时同步内容，提升团队协作效率。",
+        },
+        {
+            image: "https://via.placeholder.com/1200x400",
+            title: "版本历史管理",
+            description: "自动保存历史版本，随时查看和恢复，确保内容安全。",
+        },
+        {
+            image: "https://via.placeholder.com/1200x400",
+            title: "丰富的模板库",
+            description: "提供多种专业模板，助你快速创建高质量文档。",
+        },
+    ];
+
+    // 功能介绍数据
+    const features = [
+        {
+            title: "实时协同",
+            description: "支持多人同时编辑，实时同步内容，提升团队协作效率。",
+            icon: <Users className="w-8 h-8 text-cyan-500" />,
+        },
+        {
+            title: "版本历史",
+            description: "自动保存历史版本，随时查看和恢复，确保内容安全。",
+            icon: <Clock className="w-8 h-8 text-emerald-500" />,
+        },
+        {
+            title: "模板中心",
+            description: "提供多种专业模板，助你快速创建高质量文档。",
+            icon: <BookOpen className="w-8 h-8 text-violet-500" />,
+        },
+    ];
+
+    // 用户案例数据
+    const userCases = [
+        {
+            image: "https://via.placeholder.com/400x300",
+            title: "某科技公司",
+            description: "使用墨协后，团队协作效率提升了 50%。",
+        },
+        {
+            image: "https://via.placeholder.com/400x300",
+            title: "某教育机构",
+            description: "墨协的模板功能帮助我们快速创建了标准化文档。",
+        },
+        {
+            image: "https://via.placeholder.com/400x300",
+            title: "某设计团队",
+            description: "实时协同功能让我们的设计文档更加高效。",
+        },
     ];
 
     // 数据统计
@@ -69,30 +128,57 @@ const HomePage = () => {
             {/* 顶部导航栏 */}
             <Navbar
                 logo="墨协"
-                logoIcon={<img src="/logo.svg" className="w-6 h-6" />}
+                logoIcon={<img src="/logo.svg" className="w-6 h-6" alt="logo" />}
                 links={navLinks}
                 user={user}
                 onLogin={() => console.log("登录")}
                 onLogout={() => console.log("退出登录")}
-                themeColor="cyan"
+                themeColor="primary"
             />
 
             {/* 主体布局 */}
             <div className="flex flex-1">
                 {/* 侧边栏 */}
-                <SiderMenu menuItems={menuItems} themeColor="cyan" />
+                <SiderMenu menuItems={menuItems} themeColor="primary" />
 
                 {/* 主内容区域 */}
                 <main className="flex-1 p-8 bg-gray-50 dark:bg-neutral-800">
                     <div className="max-w-7xl mx-auto space-y-8">
-                        {/* 欢迎标题 */}
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                                欢迎回来，张三！
-                            </h1>
-                            <p className="text-lg text-gray-600 dark:text-gray-300">
-                                今天有什么计划吗？
-                            </p>
+                        {/* 轮播图 */}
+                        <Carousel items={carouselItems} />
+
+                        {/* 功能介绍 */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {features.map((feature, index) => (
+                                <Card key={index} className="p-6">
+                                    <div className="flex flex-col items-center text-center">
+                                        <div className="mb-4">{feature.icon}</div>
+                                        <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                                        <p className="text-gray-600 dark:text-gray-300">
+                                            {feature.description}
+                                        </p>
+                                    </div>
+                                </Card>
+                            ))}
+                        </div>
+
+                        {/* 用户案例 */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            {userCases.map((caseItem, index) => (
+                                <Card key={index} className="p-0 overflow-hidden">
+                                    <img
+                                        src={caseItem.image}
+                                        alt={caseItem.title}
+                                        className="w-full h-48 object-cover"
+                                    />
+                                    <div className="p-6">
+                                        <h3 className="text-xl font-bold mb-2">{caseItem.title}</h3>
+                                        <p className="text-gray-600 dark:text-gray-300">
+                                            {caseItem.description}
+                                        </p>
+                                    </div>
+                                </Card>
+                            ))}
                         </div>
 
                         {/* 数据统计卡片 */}
@@ -156,6 +242,9 @@ const HomePage = () => {
                     </div>
                 </main>
             </div>
+
+            {/* 底部 */}
+            <Footer />
         </div>
     );
 };

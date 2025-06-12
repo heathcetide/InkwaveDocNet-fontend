@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Menu, X, User, LogIn } from "lucide-react";
+import { Menu, X, LogIn } from "lucide-react";
 import { clsx } from "clsx";
+import { useAuth } from '../context/AuthContext';
 
 export const Navbar = ({
                            logo = "Logo",
@@ -9,23 +10,33 @@ export const Navbar = ({
                            user = null, // { name, avatarUrl, menu: [{ label, href }] }
                            onLogin = () => {},
                            onLogout = () => {},
-                           themeColor = "cyan", // 控制主题色类名前缀
+                           themeColor = "primary", // 控制主题色类名前缀
                            className = "",
                        }) => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const { logout } = useAuth();
 
     return (
         <nav className={clsx("w-full bg-white dark:bg-neutral-900 shadow z-40", className)}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    {logo && (
-                        <div className={clsx("flex items-center gap-2 text-xl font-bold", `text-${themeColor}-600`, `dark:text-${themeColor}-400`)}>
-                            {logoIcon && <span className="w-6 h-6">{logoIcon}</span>}
+                    <div className="flex items-center gap-2">
+                        {logoIcon || (
+                            <svg 
+                                className="w-7 h-7 text-primary-600" 
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                            >
+                                <path d="M12 2L3 21h18L12 2zm0 4l6.5 11h-13L12 6z"/>
+                            </svg>
+                        )}
+                        <span className="text-xl font-bold text-primary-800 dark:text-primary-200">
                             {logo}
-                        </div>
-                    )}
+                        </span>
+                    </div>
 
                     {/* Desktop Menu */}
                     <div className="hidden md:flex gap-6 items-center">
@@ -68,7 +79,7 @@ export const Navbar = ({
                                             </a>
                                         ))}
                                         <button
-                                            onClick={onLogout}
+                                            onClick={() => logout()}
                                             className="block w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                                         >
                                             退出登录
@@ -139,7 +150,7 @@ export const Navbar = ({
                                 </a>
                             ))}
                             <button
-                                onClick={onLogout}
+                                onClick={() => logout()}
                                 className="block w-full text-left px-2 py-1 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                             >
                                 退出登录
