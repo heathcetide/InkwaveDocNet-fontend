@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+/* 全局样式：为所有 contentEditable 聚焦时加高亮 */
+[contenteditable]:focus {
+  outline: 2px solid #3b82f6;
+  background-color: #f0f9ff;
+}
+
