@@ -4,20 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="35aab499-5a33-4280-a6c7-244eeb94721d" name="Changes" comment="feat: add Home Page">
-      <change afterPath="$PROJECT_DIR$/src/components/AvatarGroup.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/PasswordStrengthMeter.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/Settings.js" afterDir="false" />
+    <list default="true" id="35aab499-5a33-4280-a6c7-244eeb94721d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/craco.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jsconfig.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Card.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Card.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Navbar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Switch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Switch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/logo512.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +111,8 @@
       <workItem from="1749700281216" duration="2913000" />
       <workItem from="1749717511437" duration="7191000" />
       <workItem from="1749732203215" duration="7156000" />
-      <workItem from="1749740228396" duration="5399000" />
+      <workItem from="1749740228396" duration="5526000" />
+      <workItem from="1749774649932" duration="831000" />
     </task>
     <task id="LOCAL-00001" summary="fix: README.md">
       <option name="closed" value="true" />
@@ -155,6 +150,8 @@
     <MESSAGE value="feat: add common and core components" />
     <MESSAGE value="feat: add all needed components" />
     <MESSAGE value="feat: add Home Page" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add Home Page" />
+    <MESSAGE value="feat: add About Page" />
+    <MESSAGE value="feat: add All Business Page" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add All Business Page" />
   </component>
 </project>

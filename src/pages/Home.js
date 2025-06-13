@@ -1,15 +1,15 @@
 import React from "react";
-import { Navbar } from "../components/Navbar";
-import { SiderMenu } from "../components/SiderMenu";
+import { Navbar } from "@/components/Navbar";
+import { SiderMenu } from "@/components/SiderMenu";
 import { Home, Users, Settings, FileText, BookOpen, Clipboard, Clock, TrendingUp } from "lucide-react";
-import { Card } from "../components/Card";
-import { Chart } from "../components/Chart";
-import { Timeline } from "../components/Timeline";
-import { ProgressBar } from "../components/ProgressBar";
-import { Button } from "../components/Button";
-import { useNotification } from "../components/NotificationCenter";
-import { Carousel } from "../components/Carousel";
-import { Footer } from "../components/Footer";
+import { Card } from "@/components/Card";
+import { Chart } from "@/components/Chart";
+import { Timeline } from "@/components/Timeline";
+import { ProgressBar } from "@/components/ProgressBar";
+import { Button } from "@/components/Button";
+import { useNotification } from "@/components/NotificationCenter";
+import { Carousel } from "@/components/Carousel";
+import { Footer } from "@/components/Footer";
 
 const HomePage = () => {
     // 导航栏链接
