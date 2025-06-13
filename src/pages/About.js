@@ -1,9 +1,9 @@
 import React from "react";
-import { Navbar } from "../components/Navbar";
-import { SiderMenu } from "../components/SiderMenu";
-import { Timeline } from "../components/Timeline";
-import { Card } from "../components/Card";
-import { Footer } from "../components/Footer";
+import { Navbar } from "@/components/Navbar";
+import { SiderMenu } from "@/components/SiderMenu";
+import { Timeline } from "@/components/Timeline";
+import { Card } from "@/components/Card";
+import { Footer } from "@/components/Footer";
 import { Users, Clock, Handshake, Mail, ArrowRight } from "lucide-react";
 
 const AboutPage = () => {
@@ -16,9 +16,34 @@ const AboutPage = () => {
         }
     ];
 
+    const user = {
+        name: "张三",
+        avatarUrl: "default",
+        menu: [
+            { label: "个人中心", href: "/profile" },
+            { label: "设置", href: "/settings" },
+        ],
+    };
+
+    // 导航栏链接
+    const navLinks = [
+        { label: "首页", href: "/" },
+        { label: "文档库", href: "/library" },
+        { label: "模板中心", href: "/templates" },
+    ];
+
     return (
         <div className="min-h-screen flex flex-col">
-            <Navbar themeColor="primary" />
+            {/* 顶部导航栏 */}
+            <Navbar
+                logo="墨协"
+                logoIcon={<img src="/logo192.png" alt="logo" className="w-7 h-7" />}
+                links={navLinks}
+                user={user}
+                onLogin={() => console.log("登录")}
+                onLogout={() => console.log("退出登录")}
+                themeColor="primary"
+            />
             <div className="flex flex-1">
                 <SiderMenu themeColor="primary" />
                 <main className="flex-1 p-8 bg-gray-50 dark:bg-neutral-800">

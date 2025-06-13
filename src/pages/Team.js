@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { Navbar} from "../components/Navbar";
-import { Card } from "../components/Card";
-import { Button } from "../components/Button";
-import { Select } from "../components/Select";
-import { Tabs } from "../components/Tabs";
-import { Switch } from "../components/Switch";
-import { Badge } from "../components/Badge";
+import { Navbar} from "@/components/Navbar";
+import { Card } from "@/components/Card";
+import { Button } from "@/components/Button";
+import { Select } from "@/components/Select";
+import { Tabs } from "@/components/Tabs";
+import { Switch } from "@/components/Switch";
+import { Badge } from "@/components/Badge";
 
-import { TeamCard } from "../components/TeamCard";
+import { TeamCard } from "@/components/TeamCard";
 import { Users, Plus, Settings, Lock, Folder, Trash } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 
 const TeamPage = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("myTeams");
   const [teams] = useState([
     {
@@ -27,10 +27,34 @@ const TeamPage = () => {
     }
   ]);
 
+  const user = {
+    name: "张三",
+    avatarUrl: "default",
+    menu: [
+      {label: "个人中心", href: "/profile"},
+      {label: "设置", href: "/settings"},
+    ],
+  };
+
+  // 导航栏链接
+  const navLinks = [
+    {label: "首页", href: "/"},
+    {label: "文档库", href: "/library"},
+    {label: "模板中心", href: "/templates"},
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar themeColor="primary" />
-      
+      {/* 顶部导航栏 */}
+      <Navbar
+          logo="墨协"
+          logoIcon={<img src="/logo192.png" alt="logo" className="w-7 h-7" />}
+          links={navLinks}
+          user={user}
+          onLogin={() => console.log("登录")}
+          onLogout={() => console.log("退出登录")}
+          themeColor="primary"
+      />
       <main className="flex-1 p-8 bg-gray-50 dark:bg-neutral-900">
         <div className="max-w-6xl mx-auto space-y-6">
           <div className="flex items-center justify-between">

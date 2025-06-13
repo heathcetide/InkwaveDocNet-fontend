@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Navbar } from "../components/Navbar";
-import { Editor } from "../components/Editor";
-import { CommentList } from "../components/CommentList";
-import { VersionHistory } from "../components/VersionHistory";
-import { Footer } from "../components/Footer";
-import { Tabs } from "../components/Tabs";
-import { Button } from "../components/Button";
-import { Avatar } from "../components/Avatar";
+import { Navbar } from "@/components/Navbar";
+import { Editor } from "@/components/Editor";
+import { CommentList } from "@/components/CommentList";
+import { VersionHistory } from "@/components/VersionHistory";
+import { Footer } from "@/components/Footer";
+import { Tabs } from "@/components/Tabs";
+import { Button } from "@/components/Button";
+import { Avatar } from "@/components/Avatar";
 import {
   Save, Undo, Redo, Share, Download, List, MessageSquare, Clock, Users, Type
 } from "lucide-react";

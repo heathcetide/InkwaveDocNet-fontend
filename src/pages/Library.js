@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Navbar } from "../components/Navbar";
-import { SiderMenu } from "../components/SiderMenu";
+import { Navbar } from "@/components/Navbar";
+import { SiderMenu } from "@/components/SiderMenu";
 import { 
     Search, FileText, Folder, Star, List, Grid, Plus, Upload, ChevronDown, Users 
 } from "lucide-react";
-import { Card } from "../components/Card";
-import { Button } from "../components/Button";
-import { Footer } from "../components/Footer";
+import { Card } from "@/components/Card";
+import { Button } from "@/components/Button";
+import { Footer } from "@/components/Footer";
 
 const LibraryPage = () => {
     // 视图模式状态
@@ -59,9 +59,34 @@ const LibraryPage = () => {
         // 更多文档数据...
     ];
 
+    const user = {
+        name: "张三",
+        avatarUrl: "default",
+        menu: [
+            { label: "个人中心", href: "/profile" },
+            { label: "设置", href: "/settings" },
+        ],
+    };
+
+    // 导航栏链接
+    const navLinks = [
+        { label: "首页", href: "/" },
+        { label: "文档库", href: "/library" },
+        { label: "模板中心", href: "/templates" },
+    ];
+
     return (
         <div className="min-h-screen flex flex-col">
-            <Navbar themeColor="primary" />
+            {/* 顶部导航栏 */}
+            <Navbar
+                logo="墨协"
+                logoIcon={<img src="/logo192.png" alt="logo" className="w-7 h-7" />}
+                links={navLinks}
+                user={user}
+                onLogin={() => console.log("登录")}
+                onLogout={() => console.log("退出登录")}
+                themeColor="primary"
+            />
             <div className="flex flex-1">
                 {/* 左侧侧边栏 */}
                 <SiderMenu themeColor="primary" />

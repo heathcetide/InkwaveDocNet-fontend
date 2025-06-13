@@ -1,8 +1,8 @@
 import React from "react";
-import { Navbar } from "../components/Navbar";
-import { SiderMenu } from "../components/SiderMenu";
-import { Accordion } from "../components/Accordion";
-import { Footer } from "../components/Footer";
+import { Navbar } from "@/components/Navbar";
+import { SiderMenu } from "@/components/SiderMenu";
+import { Accordion } from "@/components/Accordion";
+import { Footer } from "@/components/Footer";
 import { Search, Mail, MessageSquare } from "lucide-react";
 
 const HelpCenterPage = () => {
@@ -15,12 +15,36 @@ const HelpCenterPage = () => {
             title: "如何邀请团队成员？",
             content: "在文档编辑页面右上角点击'分享'按钮，输入对方邮箱即可发送邀请。"
         },
-        // 更多问题...
+    ];
+
+    const user = {
+        name: "张三",
+        avatarUrl: "default",
+        menu: [
+            { label: "个人中心", href: "/profile" },
+            { label: "设置", href: "/settings" },
+        ],
+    };
+
+    // 导航栏链接
+    const navLinks = [
+        { label: "首页", href: "/" },
+        { label: "文档库", href: "/library" },
+        { label: "模板中心", href: "/templates" },
     ];
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Navbar />
+            {/* 顶部导航栏 */}
+            <Navbar
+                logo="墨协"
+                logoIcon={<img src="/logo192.png" alt="logo" className="w-7 h-7" />}
+                links={navLinks}
+                user={user}
+                onLogin={() => console.log("登录")}
+                onLogout={() => console.log("退出登录")}
+                themeColor="primary"
+            />
             <div className="flex flex-1">
                 <SiderMenu />
                 <main className="flex-1 p-8 bg-gray-50 dark:bg-neutral-800">

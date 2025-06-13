@@ -25,7 +25,7 @@ export const CommandPalette = ({
     }, [handleKeyDown]);
 
     const filtered = actions.filter((a) =>
-        a.label.toLowerCase().includes(query.toLowerCase())
+        (a.label || "").toLowerCase().includes((query || "").toLowerCase())
     );
 
     return (

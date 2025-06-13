@@ -1,15 +1,51 @@
 import React from "react";
-import { Navbar } from "../components/Navbar";
-import { SiderMenu } from "../components/SiderMenu";
-import { Footer } from "../components/Footer";
-import { Shield } from "lucide-react";
+import { Navbar } from "@/components/Navbar";
+import { SiderMenu } from "@/components/SiderMenu";
+import { Footer } from "@/components/Footer";
+import {BookOpen, FileText, Home, Settings, Shield, Users} from "lucide-react";
 
 const PrivacyPolicyPage = () => {
+    const user = {
+        name: "张三",
+        avatarUrl: "default",
+        menu: [
+            { label: "个人中心", href: "/profile" },
+            { label: "设置", href: "/settings" },
+        ],
+    };
+
+    // 导航栏链接
+    const navLinks = [
+        { label: "首页", href: "/" },
+        { label: "文档库", href: "/library" },
+        { label: "模板中心", href: "/templates" },
+    ];
+
+    // 侧边栏菜单
+    const menuItems = [
+        { label: "仪表盘", icon: <Home className="w-5 h-5" />, path: "/dashboard" },
+        { label: "文档管理", icon: <FileText className="w-5 h-5" />, path: "/documents" },
+        { label: "模板中心", icon: <BookOpen className="w-5 h-5" />, path: "/templates" },
+        { label: "我的团队", icon: <Users className="w-5 h-5" />, path: "/teams" },
+        { label: "系统设置", icon: <Settings className="w-5 h-5" />, path: "/settings" },
+    ];
+
     return (
         <div className="min-h-screen flex flex-col">
-            <Navbar />
+            {/* 顶部导航栏 */}
+            <Navbar
+                logo="墨协"
+                logoIcon={<img src="/logo192.png" alt="logo" className="w-7 h-7" />}
+                links={navLinks}
+                user={user}
+                onLogin={() => console.log("登录")}
+                onLogout={() => console.log("退出登录")}
+                themeColor="primary"
+            />
             <div className="flex flex-1">
-                <SiderMenu />
+                {/* 侧边栏 */}
+                <SiderMenu menuItems={menuItems} themeColor="primary" />
+
                 <main className="flex-1 p-8 bg-gray-50 dark:bg-neutral-800">
                     <div className="max-w-4xl mx-auto space-y-8">
                         <div className="flex items-center gap-4">

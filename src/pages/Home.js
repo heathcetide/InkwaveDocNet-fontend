@@ -22,7 +22,7 @@ const HomePage = () => {
     // 用户信息（模拟）
     const user = {
         name: "张三",
-        avatarUrl: "https://via.placeholder.com/150",
+        avatarUrl: "default",
         menu: [
             { label: "个人中心", href: "/profile" },
             { label: "设置", href: "/settings" },
@@ -41,17 +41,17 @@ const HomePage = () => {
     // 轮播图数据
     const carouselItems = [
         {
-            image: "https://via.placeholder.com/1200x400",
+            image: "https://cetide-1325039295.cos.ap-chengdu.myqcloud.com/west/carousel_team.png",
             title: "实时协同编辑",
             description: "支持多人同时编辑，实时同步内容，提升团队协作效率。",
         },
         {
-            image: "https://via.placeholder.com/1200x400",
+            image: "https://cetide-1325039295.cos.ap-chengdu.myqcloud.com/west/carousel_rollback.png",
             title: "版本历史管理",
             description: "自动保存历史版本，随时查看和恢复，确保内容安全。",
         },
         {
-            image: "https://via.placeholder.com/1200x400",
+            image: "https://cetide-1325039295.cos.ap-chengdu.myqcloud.com/west/carousel_template.png",
             title: "丰富的模板库",
             description: "提供多种专业模板，助你快速创建高质量文档。",
         },
@@ -73,25 +73,6 @@ const HomePage = () => {
             title: "模板中心",
             description: "提供多种专业模板，助你快速创建高质量文档。",
             icon: <BookOpen className="w-8 h-8 text-violet-500" />,
-        },
-    ];
-
-    // 用户案例数据
-    const userCases = [
-        {
-            image: "https://via.placeholder.com/400x300",
-            title: "某科技公司",
-            description: "使用墨协后，团队协作效率提升了 50%。",
-        },
-        {
-            image: "https://via.placeholder.com/400x300",
-            title: "某教育机构",
-            description: "墨协的模板功能帮助我们快速创建了标准化文档。",
-        },
-        {
-            image: "https://via.placeholder.com/400x300",
-            title: "某设计团队",
-            description: "实时协同功能让我们的设计文档更加高效。",
         },
     ];
 
@@ -128,14 +109,13 @@ const HomePage = () => {
             {/* 顶部导航栏 */}
             <Navbar
                 logo="墨协"
-                logoIcon={<img src="/logo.svg" className="w-6 h-6" alt="logo" />}
+                logoIcon={<img src="/logo192.png" alt="logo" className="w-7 h-7" />}
                 links={navLinks}
                 user={user}
                 onLogin={() => console.log("登录")}
                 onLogout={() => console.log("退出登录")}
                 themeColor="primary"
             />
-
             {/* 主体布局 */}
             <div className="flex flex-1">
                 {/* 侧边栏 */}
@@ -145,7 +125,7 @@ const HomePage = () => {
                 <main className="flex-1 p-8 bg-gray-50 dark:bg-neutral-800">
                     <div className="max-w-7xl mx-auto space-y-8">
                         {/* 轮播图 */}
-                        <Carousel items={carouselItems} />
+                        <Carousel items={carouselItems} aspectRatio="3/1"  />
 
                         {/* 功能介绍 */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -156,25 +136,6 @@ const HomePage = () => {
                                         <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
                                         <p className="text-gray-600 dark:text-gray-300">
                                             {feature.description}
-                                        </p>
-                                    </div>
-                                </Card>
-                            ))}
-                        </div>
-
-                        {/* 用户案例 */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {userCases.map((caseItem, index) => (
-                                <Card key={index} className="p-0 overflow-hidden">
-                                    <img
-                                        src={caseItem.image}
-                                        alt={caseItem.title}
-                                        className="w-full h-48 object-cover"
-                                    />
-                                    <div className="p-6">
-                                        <h3 className="text-xl font-bold mb-2">{caseItem.title}</h3>
-                                        <p className="text-gray-600 dark:text-gray-300">
-                                            {caseItem.description}
                                         </p>
                                     </div>
                                 </Card>

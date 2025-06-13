@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Menu, X, LogIn } from "lucide-react";
 import { clsx } from "clsx";
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
+import defaultAvatar from '@/assets/default-avatar.png';
 
 export const Navbar = ({
                            logo = "Logo",
@@ -61,7 +62,7 @@ export const Navbar = ({
                             <div className="relative">
                                 <button onClick={() => setMenuOpen(!menuOpen)} className="flex items-center gap-2">
                                     <img
-                                        src={user.avatarUrl}
+                                        src={user.avatarUrl === 'default' ? defaultAvatar : user.avatarUrl}
                                         alt={user.name}
                                         className="w-8 h-8 rounded-full object-cover border border-neutral-300 dark:border-neutral-700"
                                     />

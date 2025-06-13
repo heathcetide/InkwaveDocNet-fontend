@@ -11,14 +11,22 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const login = async (token) => {
-    const decoded = jwtDecode(token);
-    setUser(decoded);
+  const login = async (email, code) => {
+    email = email || "";
+    code = code || "";
+    // ... 其他登录逻辑
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
+  };
+
+  const register = async (email, code, password) => {
+    email = email || "";
+    code = code || "";
+    password = password || "";
+    // ... 其他注册逻辑
   };
 
   return (

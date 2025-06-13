@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Navbar } from "../components/Navbar";
-import { Button } from "../components/Button";
-import { Tabs } from "../components/Tabs";
-import { Input } from "../components/Input";
-import { TemplateCard } from "../components/TemplateCard";
+import { Navbar } from "@/components/Navbar";
+import { Button } from "@/components/Button";
+import { Tabs } from "@/components/Tabs";
+import { Input } from "@/components/Input";
+import { TemplateCard } from "@/components/TemplateCard";
 import { 
   FileText, Briefcase, Book, Presentation, Layout, Plus
 } from "lucide-react";
@@ -19,6 +19,23 @@ const TemplatesPage = () => {
     { id: "design", label: "设计", icon: <Layout className="w-4 h-4" /> },
     { id: "presentation", label: "演示文稿", icon: <Presentation className="w-4 h-4" /> }
   ];
+
+  const user = {
+    name: "张三",
+    avatarUrl: "default",
+    menu: [
+      {label: "个人中心", href: "/profile"},
+      {label: "设置", href: "/settings"},
+    ],
+  };
+
+  // 导航栏链接
+  const navLinks = [
+    {label: "首页", href: "/"},
+    {label: "文档库", href: "/library"},
+    {label: "模板中心", href: "/templates"},
+  ];
+
 
   const templates = [
     {
@@ -50,8 +67,16 @@ const TemplatesPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar themeColor="primary" />
-      
+      {/* 顶部导航栏 */}
+      <Navbar
+          logo="墨协"
+          logoIcon={<img src="/logo192.png" alt="logo" className="w-7 h-7" />}
+          links={navLinks}
+          user={user}
+          onLogin={() => console.log("登录")}
+          onLogout={() => console.log("退出登录")}
+          themeColor="primary"
+      />
       <main className="flex-1 p-8 bg-gray-50 dark:bg-neutral-900">
         <div className="max-w-6xl mx-auto space-y-6">
           {/* 头部操作栏 */}

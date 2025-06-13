@@ -30,7 +30,7 @@ export const SiderMenu = ({
         >
             {/* Logo */}
             <div className="h-16 flex items-center justify-between px-4 border-b border-neutral-200 dark:border-neutral-700">
-                {!collapsed && <span className={clsx("text-xl font-bold", `text-${themeColor}-600 dark:text-${themeColor}-400`)}>MyPanel</span>}
+                {!collapsed && <span className={clsx("text-xl font-bold", `text-${themeColor}-600 dark:text-${themeColor}-400`)}>菜单面板</span>}
                 <button
                     onClick={() => setCollapsed(!collapsed)}
                     className="text-neutral-400 hover:text-neutral-700 dark:hover:text-white"

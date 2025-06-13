@@ -19,6 +19,8 @@ import CollaborationPage from "./pages/Collaboration";
 import TeamPage from "./pages/Team";
 import TemplatesPage from "./pages/Templates";
 import SettingsPage from "./pages/Settings";
+import LoginPage from "@/pages/Login";
+import RegisterPage from "@/pages/Register";
 
 function App() {
     useKeyboardShortcuts([
@@ -42,6 +44,7 @@ function App() {
                 <BrowserRouter>
                     <ToastProvider swipeDirection="right">
                         <Routes>
+                            <Route path="/login" element={<LoginPage/>} />
                             <Route path="/" element={<HomePage />} />
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/help" element={<HelpCenterPage />} />
@@ -89,6 +92,7 @@ function App() {
                                     // </ProtectedRoute>
                                 }
                             />
+                            <Route path="/register" element={<RegisterPage />} />
                             <Route path="*" element={<Navigate to="/" replace />} />
                         </Routes>
                     </ToastProvider>

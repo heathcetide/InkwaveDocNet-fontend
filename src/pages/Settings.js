@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import { Navbar} from "../components/Navbar";
-import { Card } from "../components/Card";
-import { Button } from "../components/Button";
-import { Select } from "../components/Select";
-import { Tabs } from "../components/Tabs";
-import { Switch } from "../components/Switch";
-import { Input } from "../components/Input";
+import { Navbar} from "@/components/Navbar";
+import { Card } from "@/components/Card";
+import { Button } from "@/components/Button";
+import { Select } from "@/components/Select";
+import { Tabs } from "@/components/Tabs";
+import { Switch } from "@/components/Switch";
+import { Input } from "@/components/Input";
 import {
     Lock, Palette, Shield, User, Settings
 } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
-import { PasswordStrengthMeter } from "../components/PasswordStrengthMeter";
+import { useAuth } from "@/context/AuthContext";
+import { PasswordStrengthMeter } from "@/components/PasswordStrengthMeter";
 
 const SettingsPage = () => {
-    const { user, logout } = useAuth();
+    // const { user, logout } = useAuth();
     const [activeTab, setActiveTab] = useState("account");
     const [settings, setSettings] = useState({
         theme: "system",
@@ -29,10 +29,35 @@ const SettingsPage = () => {
         language: "zh-CN"
     });
 
+    const user = {
+        name: "张三",
+        avatarUrl: "default",
+        menu: [
+            {label: "个人中心", href: "/profile"},
+            {label: "设置", href: "/settings"},
+        ],
+    };
+
+    // 导航栏链接
+    const navLinks = [
+        {label: "首页", href: "/"},
+        {label: "文档库", href: "/library"},
+        {label: "模板中心", href: "/templates"},
+    ];
+
+
     return (
         <div className="min-h-screen flex flex-col">
-            <Navbar themeColor="primary" />
-
+            {/* 顶部导航栏 */}
+            <Navbar
+                logo="墨协"
+                logoIcon={<img src="/logo192.png" alt="logo" className="w-7 h-7" />}
+                links={navLinks}
+                user={user}
+                onLogin={() => console.log("登录")}
+                onLogout={() => console.log("退出登录")}
+                themeColor="primary"
+            />
             <main className="flex-1 p-8 bg-gray-50 dark:bg-neutral-900">
                 <div className="max-w-4xl mx-auto space-y-6">
                     <h1 className="text-2xl font-bold flex items-center gap-2">

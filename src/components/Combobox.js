@@ -8,7 +8,7 @@ export const Combobox = ({ options, value, onChange, placeholder = "请选择", 
     const [search, setSearch] = React.useState("");
 
     const filtered = options.filter((opt) =>
-        opt.label.toLowerCase().includes(search.toLowerCase())
+        (opt.label || "").toLowerCase().includes((search || "").toLowerCase())
     );
 
     const selectedLabel = options.find((o) => o.value === value)?.label;

@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
-export const Carousel = ({ items = [], interval = 5000 }) => {
+const aspectRatioClassMap = {
+    "16/9": "aspect-[16/9]",
+    "3/1": "aspect-[3/1]",
+    "4/3": "aspect-[4/3]",
+    "1/1": "aspect-square"
+};
+
+export const Carousel = ({ items = [], interval = 5000, aspectRatio = "16/9" }) => {
     const [activeIndex, setActiveIndex] = useState(0);
+
+    const aspectClass = aspectRatioClassMap[aspectRatio] || "aspect-[16/9]";
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -20,8 +29,8 @@ export const Carousel = ({ items = [], interval = 5000 }) => {
     };
 
     return (
-        <div className="relative w-full h-96 overflow-hidden rounded-xl">
-            {items.map((item, index) => (
+        <div className={`relative w-full ${aspectClass} overflow-hidden rounded-xl`}>
+        {items.map((item, index) => (
                 <div
                     key={index}
                     className={`absolute inset-0 transition-opacity duration-500 ${

@@ -25,6 +25,7 @@ export const Button = React.forwardRef(
             className,
             variant = "cyan",
             size = "md",
+            type = "button",
             children,
             loading = false,
             icon,

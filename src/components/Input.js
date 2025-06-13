@@ -17,7 +17,7 @@ const variantMap = {
 };
 
 export const Input = React.forwardRef(
-    ({ className, variant = "cyan", icon, error, ...props }, ref) => {
+    ({ className, variant = "cyan", icon, error, type = "text", ...props }, ref) => {
         const styles = variantMap[variant] || variantMap.cyan;
 
         return (
@@ -29,6 +29,13 @@ export const Input = React.forwardRef(
                 )}
                 <input
                     ref={ref}
+                    type={type}
+                    value={props.value || ""}
+                    onChange={(e) => {
+                        if (props.onChange) {
+                            props.onChange(e.target.value || "");
+                        }
+                    }}
                     className={clsx(
                         "w-full rounded-2xl border px-4 py-2 text-sm shadow-sm bg-white transition-all duration-200 ease-in-out",
                         "focus:outline-none focus:ring-2",
@@ -49,4 +56,5 @@ export const Input = React.forwardRef(
         );
     }
 );
+
 Input.displayName = "Input";

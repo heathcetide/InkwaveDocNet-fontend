@@ -13,11 +13,15 @@ export const useKeyboardShortcuts = (shortcuts = []) => {
             if (e.metaKey) combo.push("meta");
             if (e.altKey) combo.push("alt");
             if (e.shiftKey) combo.push("shift");
-            combo.push(e.key.toLowerCase());
+            if (typeof e.key === "string") {
+                combo.push(e.key.toLowerCase());
+            } else {
+                return; // 非法按键，直接忽略
+            }
             const pressed = combo.join("+");
 
             shortcuts.forEach((s) => {
-                if (s.keyCombo.toLowerCase() === pressed) {
+                if ((s.keyCombo || "").toLowerCase() === pressed) {
                     e.preventDefault();
                     s.callback();
                 }
