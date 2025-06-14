@@ -1,5 +1,6 @@
 import * as React from "react";
 import clsx from "clsx";
+import { cn } from "../lib/utils";
 
 const variantMap = {
     cyan: {
@@ -17,15 +18,15 @@ const variantMap = {
 };
 
 export const Input = React.forwardRef(
-    ({ className, variant = "cyan", icon, error, type = "text", ...props }, ref) => {
+    ({ className, variant = "cyan", icon, error, type = "text", prefixIcon, ...props }, ref) => {
         const styles = variantMap[variant] || variantMap.cyan;
 
         return (
             <div className="relative">
-                {icon && (
+                {(icon || prefixIcon) && (
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-            {icon}
-          </span>
+                        {icon || prefixIcon}
+                    </span>
                 )}
                 <input
                     ref={ref}
@@ -41,7 +42,7 @@ export const Input = React.forwardRef(
                         "focus:outline-none focus:ring-2",
                         styles.ring,
                         styles.border,
-                        icon && "pl-10",
+                        (icon || prefixIcon) && "pl-10",
                         error ? "border-red-500 focus:ring-red-500 focus:border-red-500" : "border-gray-300",
                         className
                     )}

@@ -22,6 +22,7 @@ import SettingsPage from "./pages/Settings";
 import LoginPage from "@/pages/Login";
 import RegisterPage from "@/pages/Register";
 import NotificationsPage from "@/pages/Notifications";
+import InvitePage from "@/pages/InvitePage";
 
 function App() {
     useKeyboardShortcuts([
@@ -99,6 +100,11 @@ function App() {
                                <ProtectedRoute>
                                     <NotificationsPage />
                                </ProtectedRoute>
+                            }/>
+                            <Route path="/invite" element={
+                                <ProtectedRoute>
+                                    <InvitePage/>
+                                </ProtectedRoute>
                             }/>
                         </Routes>
                     </ToastProvider>

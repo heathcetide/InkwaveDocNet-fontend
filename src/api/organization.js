@@ -53,3 +53,38 @@ export const deleteOrganization = (id) => {
 export const updateOrganization = (id, data) => {
     return request.post(`/api/organization/${id}/update`, data);
 };
+
+/**
+ * 生成邀请链接
+ * @param data 邀请参数
+ * @returns {*} 返回邀请码信息
+ */
+export const generateInvite = (data) => {
+    return request.post(`/api/org_invite/create`, data)
+}
+
+/**
+ * 验证邀请码
+ * @param code 邀请码
+ * @returns {*} 邀请码
+ */
+export const validateInvite = (code) => {
+    return request.get(`/api/org_invite/validate/${code}`);
+}
+
+
+/**
+ * 加入组织的API
+ * @param {string} code - 邀请码
+ * @returns {Promise} 返回加入组织的响应
+ */
+export const joinOrganizationByInvite = (code) => {
+    return request.post(`/api/org_invite/use/${code}`);
+};
+
+/**
+ * 获取当前用户参与的所有组织
+ */
+export const getMyJoinOrganizations = () => {
+    return request.get('/api/organization_member/my-organizations');
+};

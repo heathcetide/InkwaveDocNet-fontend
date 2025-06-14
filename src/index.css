@@ -15,3 +15,61 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* 添加自定义过渡曲线 */
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+.mobile-sidebar {
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-sidebar.closing {
+  animation: slideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drag-handle {
+  cursor: grab;
+  transition: opacity 0.2s;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* 层级引导线样式 */
+.level-guide {
+  transition: opacity 0.2s;
+  width: 2px;
+  background: #93c5fd;
+}
+
+.level-guide:hover {
+  opacity: 1 !important;
+}
+
+.level-guide-line {
+  transition: opacity 0.2s;
+  width: 2px;
+  background: #bfdbfe;
+}
+
+.doc-item:hover .level-guide-line {
+  opacity: 1;
+}
+
+.tree-connector {
+  transition: height 0.2s ease;
+}
+
+.drag-preview {
+  box-shadow: 0 0 0 2px #3b82f6;
+  background: rgba(59, 130, 246, 0.05);
+}

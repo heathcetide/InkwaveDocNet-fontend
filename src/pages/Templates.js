@@ -7,11 +7,13 @@ import { TemplateCard } from "@/components/TemplateCard";
 import { 
   FileText, Briefcase, Book, Presentation, Layout, Plus
 } from "lucide-react";
+import {useAuth} from "@/context/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 const TemplatesPage = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  
+  const navigate = useNavigate();
   const categories = [
     { id: "all", label: "全部" },
     { id: "business", label: "商务", icon: <Briefcase className="w-4 h-4" /> },
@@ -20,15 +22,7 @@ const TemplatesPage = () => {
     { id: "presentation", label: "演示文稿", icon: <Presentation className="w-4 h-4" /> }
   ];
 
-  const user = {
-    name: "张三",
-    avatarUrl: "default",
-    menu: [
-      {label: "个人中心", href: "/profile"},
-      {label: "设置", href: "/settings"},
-    ],
-  };
-
+  const {user, setUser} = useAuth();
   // 导航栏链接
   const navLinks = [
     {label: "首页", href: "/"},
@@ -36,6 +30,15 @@ const TemplatesPage = () => {
     {label: "模板中心", href: "/templates"},
   ];
 
+  // 用户信息
+  const userProfile = user ? {
+    name: user.username,
+    avatarUrl: user.avatarUrl || "default",
+    menu: [
+      { label: "个人中心", href: "/profile" },
+      { label: "设置", href: "/settings" },
+    ],
+  } : null;
 
   const templates = [
     {
@@ -70,12 +73,13 @@ const TemplatesPage = () => {
       {/* 顶部导航栏 */}
       <Navbar
           logo="墨协"
-          logoIcon={<img src="/logo192.png" alt="logo" className="w-7 h-7" />}
+          logoIcon={<img src="/logo192.png" alt="logo" className="w-7 h-7"/>}
           links={navLinks}
-          user={user}
-          onLogin={() => console.log("登录")}
-          onLogout={() => console.log("退出登录")}
+          user={userProfile}
+          onLogin={() => navigate("/login")}
+          onLogout={() => navigate("/login")}
           themeColor="primary"
+          onNotificationClick={() => navigate("/notifications")}
       />
       <main className="flex-1 p-8 bg-gray-50 dark:bg-neutral-900">
         <div className="max-w-6xl mx-auto space-y-6">

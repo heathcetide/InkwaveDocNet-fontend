@@ -6,14 +6,15 @@ import { Select } from "@/components/Select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/Tabs";
 import { Switch } from "@/components/Switch";
 import { Badge } from "@/components/Badge";
-import { TeamCard } from "@/components/TeamCard";
-import { Users, Plus, Settings, Lock, Folder, Trash } from "lucide-react";
+import { jsPDF } from "jspdf";
+import { Users, Plus, Settings, Trash } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import QRCode from "qrcode";
 import {
-  createOrganization,
+  createOrganization, getMyJoinOrganizations,
   getMyOrganizations,
   switchOrganization,
-  getCurrentOrganization, updateOrganization, deleteOrganization
+  getCurrentOrganization, updateOrganization, deleteOrganization, generateInvite
 } from "@/api/organization";
 import { useNotification } from "@/components/NotificationCenter";
 import { Modal } from "@/components/Modal";
@@ -21,6 +22,7 @@ import { Input } from "@/components/Input";
 import { Textarea } from "@/components/Textarea";
 import { Skeleton } from "@/components/Skeleton";
 import {useNavigate} from "react-router-dom";
+import {QRCodeSVG} from "qrcode.react";
 
 const TeamPage = () => {
   const {user, setUser} = useAuth();
@@ -43,6 +45,7 @@ const TeamPage = () => {
   const { addNotification } = useNotification();
   const [activeTab, setActiveTab] = useState("myTeams");
   const [teams, setTeams] = useState([]);
+  const [myTeams, setMyTeams] = useState([]);
   const [currentOrg, setCurrentOrg] = useState(null);
   const [isLoading, setIsLoading] = useState({
     teams: true,
@@ -59,6 +62,30 @@ const TeamPage = () => {
   const navigate = useNavigate();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [teamToDelete, setTeamToDelete] = useState(null);
+
+  // 团队邀请逻辑
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [inviteCodeResult, setInviteCodeResult] = useState(null);
+  const [inviteRole, setInviteRole] = useState("MEMBER");
+  const [inviteMaxUses, setInviteMaxUses] = useState("");
+  const [inviteExpiresAt, setInviteExpiresAt] = useState("");
+  const [isGeneratedOnce, setIsGeneratedOnce] = useState(false);
+
+  // 监听 activeTab 变化加载数据
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (activeTab === 'joinedTeams') {
+          const res = await getMyJoinOrganizations(); // 另一个接口，你需要自己实现
+          setMyTeams(res || []);
+        }
+      } catch (err) {
+        console.error('加载数据失败:', err);
+      }
+    };
+
+    fetchData();
+  }, [activeTab]);
 
   const handleOpenDeleteModal = (team) => {
     setTeamToDelete(team);
@@ -77,7 +104,63 @@ const TeamPage = () => {
     }
   };
 
+  const handleGenerateInvite = async () => {
+    if (!currentOrg?.id) return;
+    try {
+      const payload = {
+        organizationId: currentOrg.id,
+        role: inviteRole,
+        maxUses: inviteMaxUses ? parseInt(inviteMaxUses) : null,
+        expiresAt: new Date(inviteExpiresAt).toISOString().slice(0, 19) || null,
+      };
+
+      const res = await generateInvite(payload);
+      setInviteCodeResult(res); // 后端返回 inviteUrl, qrCodeUrl
+    } catch (err) {
+      addNotification({
+        title: "生成失败",
+        message: err.response?.data?.message || err.message,
+        type: "error"
+      });
+    }
+  };
+
+  const downloadInvitePDF = async (inviteCodeResult) => {
+    const doc = new jsPDF();
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(14);
+    doc.text("Invite Info", 10, 10);
+    doc.setFontSize(12);
+    doc.text(`Invite Code: ${inviteCodeResult.inviteCode}`, 10, 20);
+    doc.text(`Short URL: ${inviteCodeResult.shortUrl}`, 10, 30);
+    doc.text(`QR Link: ${inviteCodeResult.qrCodeUrl}`, 10, 40);
+
+    // 使用 qrcode 将 URL 转为 base64 图片
+    try {
+      const qrDataUrl = await QRCode.toDataURL(inviteCodeResult.qrCodeUrl);
+      doc.addImage(qrDataUrl, "PNG", 10, 50, 80, 80);
+    } catch (err) {
+      console.error("二维码生成失败", err);
+      doc.text("二维码生成失败", 10, 50);
+    }
+
+    doc.save("invite.pdf");
+  };
+
+  // 提示信息
+  const renderMessage = () => {
+    if (isGeneratedOnce) {
+      return <p className="text-red-600 text-sm">此邀请码仅能查看一次。</p>;
+    }
+    return <p className="text-green-600 text-sm">邀请码已成功生成，您可以导出。</p>;
+  };
+
   useEffect(() => {
+    const generatedOnce = localStorage.getItem('inviteGeneratedOnce');
+    if (generatedOnce) {
+      setIsGeneratedOnce(true);
+    }
     let isMounted = true; // 防止组件卸载时请求继续发送
     const abortController = new AbortController();
 
@@ -124,13 +207,11 @@ const TeamPage = () => {
     try {
       setSwitchingOrgId(orgId);
       await switchOrganization(orgId);
-      
-      // 直接更新当前组织状态
-      setCurrentOrg(prev => ({
-        ...teams.find(t => t.id === orgId),
-        // 保持原有数据的扩展性
-        ...prev
-      }));
+
+      const newOrg = teams.find(t => t.id === orgId);
+      if (newOrg) {
+        setCurrentOrg({ ...newOrg }); // 确保是新对象
+      }
     } catch (error) {
       addNotification({
         title: "切换失败",
@@ -390,9 +471,58 @@ const TeamPage = () => {
             </TabsContent>
 
             <TabsContent value="joinedTeams">
-              <div className="mt-4">
-                <p className="text-gray-500">您已加入的团队将显示在这里。</p>
-              </div>
+              {myTeams.length === 0 && !isLoading.teams && (
+                  <div className="col-span-full text-center py-12">
+                    <Users className="w-12 h-12 mx-auto text-gray-400" />
+                    <p className="mt-4 text-gray-500">
+                      {currentOrg ? "您尚未加入任何组织" : "请先创建或选择一个组织"}
+                    </p>
+                  </div>
+              )}
+              {myTeams.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {myTeams.map((team) => {
+                      return (
+                          <Card key={team.id} className="p-4 relative">
+                            {/* 当前组织标识 */}
+                            {currentOrg?.id === team.id && (
+                                <div className="absolute top-2 right-2">
+                                  <Badge variant="cyan">当前组织</Badge>
+                                </div>
+                            )}
+
+                            <div className="flex items-center gap-3">
+                              <img
+                                  src={team.ownerAvatar}
+                                  alt={team.ownerUsername}
+                                  className="w-10 h-10 rounded-full"
+                              />
+                              <div>
+                                <h3 className="text-lg font-semibold">{team.name}</h3>
+                                <p className="text-sm text-gray-500">{team.ownerUsername}</p>
+                              </div>
+                            </div>
+                            {team.description && (
+                                <p className="text-sm text-gray-500 mt-2">{team.description}</p>
+                            )}
+                            <div className="mt-4 flex items-center justify-between">
+                              <Badge variant="green">成员：{team.members || 0}</Badge>
+                              <div className="flex gap-2">
+                                <Button
+                                    size="sm"
+                                    variant={currentOrg?.id === team.id ? "primary" : "outline"}
+                                    loading={switchingOrgId === team.id}
+                                    onClick={() => handleSwitchOrganization(team.id)}
+                                >
+                                  {currentOrg?.id === team.id ? "当前使用中" : "设为当前"}
+                                </Button>
+                              </div>
+                            </div>
+                          </Card>
+                      );
+                    })}
+                  </div>
+              )}
             </TabsContent>
           </Tabs>
 
@@ -411,6 +541,13 @@ const TeamPage = () => {
               </div>
             </div>
           </div>
+          {currentOrg && (
+              <div className="mt-4">
+                <Button variant="outline" onClick={() => setIsInviteModalOpen(true)}>
+                  生成邀请码
+                </Button>
+              </div>
+          )}
         </div>
       </main>
 
@@ -504,6 +641,91 @@ const TeamPage = () => {
               保存更改
             </Button>
           </div>
+        </div>
+      </Modal>
+      <Modal
+          open={isInviteModalOpen}
+          onOpenChange={setIsInviteModalOpen}
+          title="生成团队邀请码"
+      >
+        <div className="space-y-4">
+          <Select
+              label="邀请角色"
+              value={inviteRole}
+              onChange={value => setInviteRole(value)}
+              options={[
+                { value: "MEMBER", label: "成员" },
+                { value: "ADMIN", label: "管理员" }
+              ]}
+          />
+
+          <Input
+              label="最大使用次数（可选）"
+              type="number"
+              value={inviteMaxUses}
+              onChange={(e) => setInviteMaxUses(e.target.value)}
+              placeholder="留空为无限"
+          />
+
+          <Input
+              label="有效期（可选）"
+              type="datetime-local"
+              value={inviteExpiresAt}
+              onChange={(e) => setInviteExpiresAt(e.target.value)}
+          />
+
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => setIsInviteModalOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={handleGenerateInvite}>生成</Button>
+          </div>
+
+          {inviteCodeResult && (
+              <div className="p-4 bg-gray-100 rounded mt-4">
+                {/* Display the Invite Code */}
+                <div className="flex justify-between mb-4">
+                  <p className="text-sm text-gray-700">邀请码：</p>
+                  <code className="text-blue-600">{inviteCodeResult.inviteCode}</code>
+                </div>
+
+                {/* Display the Short URL */}
+                <div className="flex justify-between mb-4">
+                  <p className="text-sm text-gray-700">短链接：</p>
+                  <a
+                      href={inviteCodeResult.shortUrl}
+                      className="text-blue-600 break-all"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                  >
+                    {inviteCodeResult.shortUrl}
+                  </a>
+                </div>
+
+                {/* Display the QR Code */}
+                <div className="flex justify-center mt-4">
+                  <QRCodeSVG
+                      value={inviteCodeResult.qrCodeUrl}
+                      size={256}
+                      level="H"
+                      bgColor="#FFFFFF"
+                      fgColor="#000000"
+                  />
+                </div>
+
+                {/* Message */}
+                <div className="mt-4">
+                  {renderMessage()}
+                </div>
+
+                {/* Export Button */}
+                <div className="mt-4">
+                  <Button onClick={() => downloadInvitePDF(inviteCodeResult)}>
+                    导出邀请码为PDF
+                  </Button>
+                </div>
+              </div>
+          )}
         </div>
       </Modal>
     </div>
