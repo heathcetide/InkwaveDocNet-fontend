@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import api from "../api/client";
-
 export const useDocument = (docId) => {
   const [document, setDocument] = useState(null);
   const [isLoading, setIsLoading] = useState(true);

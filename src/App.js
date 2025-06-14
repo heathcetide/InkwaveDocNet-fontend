@@ -21,6 +21,7 @@ import TemplatesPage from "./pages/Templates";
 import SettingsPage from "./pages/Settings";
 import LoginPage from "@/pages/Login";
 import RegisterPage from "@/pages/Register";
+import NotificationsPage from "@/pages/Notifications";
 
 function App() {
     useKeyboardShortcuts([
@@ -59,41 +60,46 @@ function App() {
                                 }
                             />
                             <Route path="/profile" element={
-                                // <ProtectedRoute>
+                                <ProtectedRoute>
                                     <ProfilePage />
-                                // </ProtectedRoute>
+                                </ProtectedRoute>
                             } />
                             <Route path="/collaborate/:docId" element={
-                                // <ProtectedRoute>
+                                <ProtectedRoute>
                                     <CollaborationPage />
-                                // </ProtectedRoute>
+                                </ProtectedRoute>
                             } />
                             <Route 
                                 path="/teams" 
                                 element={
-                                    // <ProtectedRoute>
+                                    <ProtectedRoute>
                                         <TeamPage />
-                                    // </ProtectedRoute>
+                                    </ProtectedRoute>
                                 }
                             />
                             <Route 
                                 path="/templates" 
                                 element={
-                                    // <ProtectedRoute>
+                                    <ProtectedRoute>
                                         <TemplatesPage />
-                                    // </ProtectedRoute>
+                                    </ProtectedRoute>
                                 }
                             />
                             <Route
                                 path="/settings"
                                 element={
-                                    // <ProtectedRoute>
+                                    <ProtectedRoute>
                                         <SettingsPage />
-                                    // </ProtectedRoute>
+                                    </ProtectedRoute>
                                 }
                             />
                             <Route path="/register" element={<RegisterPage />} />
                             <Route path="*" element={<Navigate to="/" replace />} />
+                            <Route path="/notifications" element={
+                               <ProtectedRoute>
+                                    <NotificationsPage />
+                               </ProtectedRoute>
+                            }/>
                         </Routes>
                     </ToastProvider>
                 </BrowserRouter>

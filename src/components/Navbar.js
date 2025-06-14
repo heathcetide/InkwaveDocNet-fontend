@@ -1,22 +1,29 @@
-import React, { useState } from "react";
-import { Menu, X, LogIn } from "lucide-react";
-import { clsx } from "clsx";
-import { useAuth } from '@/context/AuthContext';
+import React, {useState} from "react";
+import {Menu, X, LogIn} from "lucide-react";
+import {clsx} from "clsx";
+import {useAuth} from '@/context/AuthContext';
 import defaultAvatar from '@/assets/default-avatar.png';
-
+import {useNavigate} from "react-router-dom";
+import {Bell} from "lucide-react";
+import { useNotificationContext } from "@/context/NotificationContext";
 export const Navbar = ({
                            logo = "Logo",
                            logoIcon = null, // ReactNode or image
                            links = [], // [{ label, href }]
                            user = null, // { name, avatarUrl, menu: [{ label, href }] }
-                           onLogin = () => {},
-                           onLogout = () => {},
+                           onLogin = () => {
+                           },
+                           onLogout = () => {
+                           },
                            themeColor = "primary", // 控制主题色类名前缀
                            className = "",
+                           onNotificationClick,
                        }) => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-    const { logout } = useAuth();
+    const {logout} = useAuth();
+    const navigate = useNavigate();
+    const { unreadCount } = useNotificationContext();
 
     return (
         <nav className={clsx("w-full bg-white dark:bg-neutral-900 shadow z-40", className)}>
@@ -25,8 +32,8 @@ export const Navbar = ({
                     {/* Logo */}
                     <div className="flex items-center gap-2">
                         {logoIcon || (
-                            <svg 
-                                className="w-7 h-7 text-primary-600" 
+                            <svg
+                                className="w-7 h-7 text-primary-600"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
@@ -56,38 +63,63 @@ export const Navbar = ({
                         ))}
                     </div>
 
-                    {/* User area */}
                     <div className="hidden md:flex items-center gap-4">
                         {user ? (
-                            <div className="relative">
-                                <button onClick={() => setMenuOpen(!menuOpen)} className="flex items-center gap-2">
-                                    <img
-                                        src={user.avatarUrl === 'default' ? defaultAvatar : user.avatarUrl}
-                                        alt={user.name}
-                                        className="w-8 h-8 rounded-full object-cover border border-neutral-300 dark:border-neutral-700"
-                                    />
-                                    <span className="text-sm text-neutral-700 dark:text-neutral-200">{user.name}</span>
-                                </button>
-                                {menuOpen && (
-                                    <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded shadow-lg py-2 z-50">
-                                        {(user.menu || []).map((item, idx) => (
-                                            <a
-                                                key={idx}
-                                                href={item.href}
+                            <>
+                                {user && onNotificationClick && (
+                                    <button
+                                        onClick={onNotificationClick}
+                                        className="relative text-neutral-700 dark:text-neutral-200 hover:text-primary-500 dark:hover:text-primary-400"
+                                        title="查看通知"
+                                    >
+                                        <Bell className="w-5 h-5" />
+                                        {unreadCount > 0 && (
+                                            <span className="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
+                                        )}
+                                    </button>
+                                )}
+
+                                {/* 👤 用户头像和菜单 */}
+                                <div className="relative">
+                                    <button
+                                        onClick={() => setMenuOpen(!menuOpen)}
+                                        className="flex items-center gap-2"
+                                    >
+                                        <img
+                                            src={user.avatarUrl === 'default' ? defaultAvatar : user.avatarUrl}
+                                            alt={user.name}
+                                            className="w-8 h-8 rounded-full object-cover border border-neutral-300 dark:border-neutral-700"
+                                        />
+                                        <span className="text-sm text-neutral-700 dark:text-neutral-200">
+            {user.name}
+          </span>
+                                    </button>
+
+                                    {menuOpen && (
+                                        <div
+                                            className="absolute right-0 mt-2 w-40 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded shadow-lg py-2 z-50">
+                                            {(user.menu || []).map((item, idx) => (
+                                                <a
+                                                    key={idx}
+                                                    href={item.href}
+                                                    className="block w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                                                >
+                                                    {item.label}
+                                                </a>
+                                            ))}
+                                            <button
+                                                onClick={() => {
+                                                    logout();
+                                                    navigate("/login");
+                                                }}
                                                 className="block w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
                                             >
-                                                {item.label}
-                                            </a>
-                                        ))}
-                                        <button
-                                            onClick={() => logout()}
-                                            className="block w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                                        >
-                                            退出登录
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
+                                                退出登录
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </>
                         ) : (
                             onLogin && (
                                 <button
@@ -98,7 +130,7 @@ export const Navbar = ({
                                         `hover:text-${themeColor}-500 dark:hover:text-${themeColor}-400`
                                     )}
                                 >
-                                    <LogIn className="w-4 h-4" /> 登录
+                                    <LogIn className="w-4 h-4"/> 登录
                                 </button>
                             )
                         )}
@@ -109,7 +141,7 @@ export const Navbar = ({
                         onClick={() => setMobileOpen(!mobileOpen)}
                         className="md:hidden text-neutral-700 dark:text-neutral-200"
                     >
-                        {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                        {mobileOpen ? <X className="w-5 h-5"/> : <Menu className="w-5 h-5"/>}
                     </button>
                 </div>
             </div>
@@ -167,7 +199,7 @@ export const Navbar = ({
                                     `hover:text-${themeColor}-500 dark:hover:text-${themeColor}-400`
                                 )}
                             >
-                                <LogIn className="w-4 h-4" /> 登录
+                                <LogIn className="w-4 h-4"/> 登录
                             </button>
                         )
                     )}

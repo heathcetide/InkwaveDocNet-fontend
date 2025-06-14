@@ -69,8 +69,14 @@
   },
   "scripts": {
     "start": "craco start",
+    "start:dev": "REACT_APP_ENV=development craco start",
+    "start:staging": "REACT_APP_ENV=staging craco start",
     "build": "craco build",
-    "test": "craco test"
+    "build:dev": "REACT_APP_ENV=development craco build",
+    "build:staging": "REACT_APP_ENV=staging craco build",
+    "build:prod": "REACT_APP_ENV=production craco build",
+    "test": "craco test",
+    "eject": "craco eject"
   },
   "eslintConfig": {
     "extends": [

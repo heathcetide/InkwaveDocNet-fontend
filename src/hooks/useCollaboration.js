@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDocumentPermissions } from '../contexts/DocumentPermissionsContext';
+import { useDocumentPermissions } from '@/contexts/DocumentPermissionsContext';
 
 export const useCollaboration = (docId) => {
   const { checkPermission } = useDocumentPermissions();

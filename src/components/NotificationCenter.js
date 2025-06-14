@@ -3,6 +3,11 @@ import { clsx } from "clsx";
 
 const NotificationContext = createContext();
 
+// 新增一个静态通知中心对象
+export const notificationCenter = {
+    addNotification: null, // 之后由 Provider 设置
+};
+
 export const NotificationProvider = ({ children, max = 3 }) => {
     const [notifications, setNotifications] = useState([]);
     const idRef = useRef(0);
@@ -14,12 +19,32 @@ export const NotificationProvider = ({ children, max = 3 }) => {
         });
     };
 
+    // 注入到全局对象中
+    notificationCenter.addNotification = addNotification;
+
     const removeNotification = (id) => {
         setNotifications((prev) => prev.filter((n) => n.id !== id));
     };
 
+    const markAsRead = (id) => {
+        setNotifications((prev) =>
+            prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+        );
+    };
+
+    const deleteNotification = (id) => {
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
+    };
+
     return (
-        <NotificationContext.Provider value={{ addNotification }}>
+        <NotificationContext.Provider 
+            value={{ 
+                notifications,
+                addNotification,
+                markAsRead,
+                deleteNotification 
+            }}
+        >
             {children}
             <div className="fixed top-4 right-4 z-50 flex flex-col gap-3 w-[320px]">
                 {notifications.map((n) => (
